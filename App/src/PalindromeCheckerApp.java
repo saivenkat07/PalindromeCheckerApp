@@ -1,32 +1,25 @@
 import java.util.Stack;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String input = "madam";
+        String input = "level";
 
-        PalindromeStrategy strategy = new StackStrategy();
-        // PalindromeStrategy strategy = new DequeStrategy();
+        long startTime = System.nanoTime();
 
-        PalindromeContext context = new PalindromeContext(strategy);
+        boolean result = checkUsingStack(input);
 
-        boolean result = context.check(input);
+        long endTime = System.nanoTime();
+
+        long executionTime = endTime - startTime;
 
         System.out.println("Input : " + input);
         System.out.println("Is Palindrome? : " + result);
+        System.out.println("Execution Time : " + executionTime + " ns");
     }
-}
 
-interface PalindromeStrategy {
-    boolean check(String input);
-}
-
-class StackStrategy implements PalindromeStrategy {
-
-    public boolean check(String input) {
+    private static boolean checkUsingStack(String input) {
 
         Stack<Character> stack = new Stack<>();
 
@@ -41,38 +34,5 @@ class StackStrategy implements PalindromeStrategy {
         }
 
         return true;
-    }
-}
-
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean check(String input) {
-
-        Deque<Character> deque = new LinkedList<>();
-
-        for (char c : input.toCharArray()) {
-            deque.addLast(c);
-        }
-
-        while (deque.size() > 1) {
-            if (deque.removeFirst() != deque.removeLast()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-class PalindromeContext {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String input) {
-        return strategy.check(input);
     }
 }
